@@ -1,0 +1,12 @@
+# useSharedValue hook 
+It is used to pass or update any value to the UI thread.
+# useAnimatedStyle hook
+useAnimatedStyle hook takes a function and a dependancy array. It returns a animated style object 
+that we merge with the style object of the Animated.View.
+# withTiming
+It takes animation value, a duration object and a callback. Turns initial value to given animation 
+value withing given duration. 
+#withRepeat
+It takes animation, numberOfRepeat, reverse (boolean), callback?: AnimationCallback
+#withSpring
+It takes AnimatableValue, userConfig?: WithSpringConfig, callback?: AnimationCallback
