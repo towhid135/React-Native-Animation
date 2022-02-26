@@ -6,46 +6,48 @@ Animated,
 {
   useSharedValue,
   useAnimatedStyle,
-  withTiming,
-  withSpring,
-  withRepeat,
+  useAnimatedGestureHandler
+
 } 
 from 'react-native-reanimated';
 
+import {GestureHandlerRootView,PanGestureHandler} from 'react-native-gesture-handler';
+
 const SIZE = 100.0;
-//Worklet or js function to manage rotation
-const handleRotation = (progress) => {
- 'worklet';
- //console.log('type',typeof progress);
- return `${progress * 2 * Math.PI}rad`;
-}
+
 export default function App() {
+  const translateX = useSharedValue(0);
+  const translateY = useSharedValue(0)
 
-  /*useShared value allows to update and pass value to the UI thread */
-  const progress = useSharedValue(1);
-  const scale = useSharedValue(2);
-  const reanimatedStyle = useAnimatedStyle(() =>{
+  const panGestureEvent = useAnimatedGestureHandler({
+    onStart: (event,context) =>{
+      context.translateX = translateX.value;
+      context.translateY = translateY.value;
+    },
+    onActive: (event,context) => {
+      translateX.value = event.translationX + context.translateX,
+      translateY.value = event.translationY + context.translateY
+    },
+    onEnd: () => {}
+  })
+
+  const reanimated = useAnimatedStyle(() =>{
     return {
-      opacity: progress.value,
-      transform: [{scale: scale.value},{rotate: handleRotation(progress.value) }],
-      borderRadius: (progress.value * SIZE) / 2,
-    };
-  },[progress]
-  )
-  //console.log('progress',progress.value);
-  //console.log('opacity',reanimatedStyle.opacity);
+      transform: [
+        {translateX: translateX.value},
+        {translateY: translateY.value}
+      ]
+    }
+  })
 
-  useEffect(()=>{
-    progress.value = withRepeat( withTiming(0,{duration: 2000}), -1, true );
-    scale.value = withRepeat( withTiming(1,{duration: 2000}), -1, true);
-    //scale.value = withSpring(2);
-  },[])
   return (
-    <View style={styles.container}>
-      <Animated.View 
-       style = {[{height: SIZE,width: SIZE, backgroundColor: 'blue'},reanimatedStyle]}
-      />
-    </View>
+    <GestureHandlerRootView style={{flex:1}}>
+      <View style={styles.container}>
+        <PanGestureHandler onGestureEvent={panGestureEvent}>
+          <Animated.View style = {[styles.square,reanimated]}/>
+        </PanGestureHandler>
+      </View>
+    </GestureHandlerRootView>
   );
 }
 
@@ -56,4 +58,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  square:{
+    height: SIZE,
+    width: SIZE, 
+    backgroundColor: 'rgba(0,0,256,0.5)',
+    borderRadius: 20
+  }
 });

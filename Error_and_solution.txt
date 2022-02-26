@@ -1,0 +1,2 @@
+# If GestureHandler doesn't fire any events or onGestureEvent doesn't gets fire then set everything
+inside <GestureHandlerRootView style={{flex:1}}> <GestureHandlerRootView/>.
