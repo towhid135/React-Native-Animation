@@ -14,9 +14,9 @@ from 'react-native-reanimated';
 export default function App() {
 
   return (
-    <View style={styles.container}>
-      <Text>Hello</Text>
-    </View>
+    <Animated.ScrollView>
+      
+    </Animated.ScrollView>
   );
 }
 
