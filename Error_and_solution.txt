@@ -3,3 +3,5 @@ inside <GestureHandlerRootView style={{flex:1}}> <GestureHandlerRootView/>.
 
 # If we pass useSharedValue to a child component then the view of the child component should be
 a Animated.View.
+
+# Animation doesn't works on animated view.
